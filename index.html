@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hanumangarh T-20 Cup</title>
+    <title>Hanumangarh T-20 Cup Poster</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -12,22 +12,25 @@
             background-color: #f0f2f5;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            align-items: flex-start; /* Align to start for scrolling */
+            min-height: 100vh; /* Ensure body takes at least full viewport height */
             margin: 0;
-            padding: 0;
+            padding: 20px; /* Add some padding around the content for better spacing */
             box-sizing: border-box;
+            overflow-y: scroll; /* Enable vertical scrolling for the entire page */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
         }
         .poster-container {
             position: relative;
             width: 100%;
             max-width: 800px;
-            height: 100vh; /* Adjust height as needed, could be dynamic */
-            max-height: 1200px; /* Max height for a poster, adjust if content overflows */
+            /* Removed fixed height and max-height to allow content to dictate height */
+            height: auto; /* Allow height to adjust based on content */
+            min-height: 80vh; /* Ensure it's not too small on larger screens */
             background-color: #ffffff;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
+            overflow: hidden; /* Keep content inside rounded corners */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -35,6 +38,8 @@
             color: #333;
             text-align: center;
             padding-bottom: 20px; /* Add padding at the bottom for content below rules */
+            margin-top: 20px; /* Add some top margin to lift it from the top edge */
+            margin-bottom: 20px; /* Add some bottom margin to provide space when scrolling */
         }
         .poster-background {
             position: absolute;
@@ -59,7 +64,6 @@
             gap: 15px;
             box-sizing: border-box;
         }
-        /* Removed loading spinner for background image as it's no longer fetched dynamically */
         .text-overlay {
             background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background for text */
             color: #fff;
@@ -142,7 +146,6 @@
             width: 100%;
             box-sizing: border-box;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            /* Added flexbox properties to center content */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -184,25 +187,23 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Styles for Directions button */
         .directions-section {
-            background-color: rgba(66, 153, 225, 0.8); /* Blue background for directions */
-            margin-top: 15px; /* Add some space above this section */
+            background-color: rgba(66, 153, 225, 0.8);
+            margin-top: 15px;
         }
         .directions-section button {
-            background-color: #3182CE; /* Darker blue button */
+            background-color: #3182CE;
         }
         .directions-section button:hover {
             background-color: #2b6cb0;
         }
 
-        /* New styles for Call button */
         .call-section {
-            background-color: rgba(220, 38, 38, 0.8); /* Red background for call button */
+            background-color: rgba(220, 38, 38, 0.8);
             margin-top: 15px;
         }
         .call-section button {
-            background-color: #DC2626; /* Darker red button */
+            background-color: #DC2626;
         }
         .call-section button:hover {
             background-color: #b91c1c;
@@ -256,11 +257,11 @@
                 </ol>
             </div>
 
-            <div class="directions-section llm-section text-overlay">
+            <div class="directions-section llm-section">
                 <button id="getDirectionsBtn">📍 Get Directions to Venue</button>
             </div>
 
-            <div class="call-section llm-section text-overlay">
+            <div class="call-section llm-section">
                 <button id="callSomeoneBtn">📞 Call Shakti Sharma for Enquiries</button>
             </div>
         </div>
@@ -268,6 +269,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
+
             const getDirectionsBtn = document.getElementById('getDirectionsBtn');
             const callSomeoneBtn = document.getElementById('callSomeoneBtn');
 

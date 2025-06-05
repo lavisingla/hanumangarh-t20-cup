@@ -261,7 +261,7 @@
             async function generateBackgroundImage() {
                 try {
                     const payload = { instances: { prompt: backgroundPrompt }, parameters: { "sampleCount": 1} };
-                    const apiKey = ""; // API key will be provided at runtime
+                    const apiKey = "AIzaSyDZsl_rk4rX8-x8SDFqi5g-9-8db5ri1eE"; // API key will be provided at runtime
                     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
 
                     const response = await fetch(apiUrl, {

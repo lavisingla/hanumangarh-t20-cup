@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hanumangarh T-20 Cup Poster</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .poster-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 100vh; /* Adjust height as needed, could be dynamic */
+            max-height: 1200px; /* Max height for a poster, adjust if content overflows */
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Align content to top initially */
+            color: #333;
+            text-align: center;
+            padding-bottom: 20px; /* Add padding at the bottom for content below rules */
+        }
+        .poster-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            filter: brightness(0.6) grayscale(0.2); /* Slightly darken and desaturate background for text readability */
+            z-index: 1;
+        }
+        .poster-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            box-sizing: border-box;
+        }
+        .loading-spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 50px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .text-overlay {
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background for text */
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .text-overlay h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .text-overlay p, .text-overlay ul {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        .text-overlay ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .text-overlay li {
+            margin-bottom: 3px;
+        }
+        .team-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .team-item {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .emoji {
+            font-size: 1.2rem;
+        }
+        .match-schedule {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .semifinals {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 15px;
+        }
+
+        .semifinals li {
+            width: 35%;
+            list-style: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .final {
+            list-style: none;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 10px;
+        }
+
+        .llm-section {
+            background-color: rgba(45, 55, 72, 0.8); /* Darker background for LLM section */
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            width: 90%;
+            box-sizing: border-box;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .llm-section button {
+            background-color: #4CAF50; /* Green button */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .llm-section button:hover {
+            background-color: #45a049;
+        }
+        .llm-output {
+            margin-top: 15px;
+            font-style: italic;
+            min-height: 25px; /* Ensure space even when empty */
+            color: #a0aec0; /* Lighter text for output */
+        }
+        .llm-loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4CAF50;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="poster-container" id="main-poster-container">
+        <div id="loading-overlay" class="absolute inset-0 bg-gray-900 bg-opacity-75 flex flex-col justify-center items-center z-30">
+            <div id="loading-indicator" class="loading-spinner"></div>
+            <p id="loading-text" class="text-white text-lg mt-4">Crafting your perfect poster...</p>
+        </div>
+
+        <div id="poster-background" class="poster-background"></div>
+
+        <div id="poster-content" class="poster-content hidden">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg">Hanumangarh T-20 Cup 2025</h1>
+            <p class="text-xl md:text-2xl font-bold text-white mb-4 drop-shadow-md">Sunday, June 8th</p>
+
+            <div class="text-overlay">
+                <h2 class="text-orange-300">Teams Battling for Glory:</h2>
+                <div class="team-list">
+                    <span class="team-item">Hanumangarh Strikers <span class="emoji">⭐</span></span>
+                    <span class="team-item">Jorkian Kings <span class="emoji">👑</span></span>
+                    <span class="team-item">Johal Lions <span class="emoji">🦁</span></span>
+                    <span class="team-item">Hanumangarh Challengers <span class="emoji">🐅</span></span>
+                </div>
+            </div>
+
+            <div class="text-overlay text-left">
+                <h2 class="text-blue-300">Match Timings:</h2>
+                <ul class="match-schedule">
+                    <div class="semifinals">
+                        <li><b>Semifinal 1:</b> Toss 5:45 AM | Match 6:00 AM</li>
+                        <li><b>Semifinal 2:</b> Toss 8:45 AM | Match 9:00 AM</li>
+                    </div>
+                    <li class="final"><b>Final Match:</b> Toss 3:45 PM | Match 4:00 PM</li>
+                </ul>
+            </div>
+
+            <div class="text-overlay text-left">
+                <h2 class="text-green-300">Tournament Rules:</h2>
+                <ul class="list-disc list-inside">
+                    <li>Each match: 20 overs, 12 players (11 playing + 1 impact).</li>
+                    <li>Min 5 bowlers, 1 bowler max 4 overs.</li>
+                    <li>6 over batting powerplay (max 2 players outside 30 yard).</li>
+                    <li>7-20 overs: max 5 fielders outside circle.</li>
+                    <li>One innings time: 1 hour 25 min.</li>
+                    <li>**Penalty for slow over rate:** 2 extra fielder inside 30 yd if 18 overs not finished in 1hr 20min.</li>
+                    <li>**Penalty for late arrival:** 5 runs + 1 over for every 5 min.</li>
+                    <li>5 min water break after 10 overs of each inning.</li>
+                    <li>Innings break of 10 minutes.</li>
+                    <li>No extra fielder will be provided.</li>
+                    <li>Teams must start with available players if full squad isn't present.</li>
+                    <li>Each batting team gets 3 new balls per inning (not replaced until broken or lost).</li>
+                </ul>
+            </div>
+
+            <div class="llm-section">
+                <button id="generateSloganBtn">✨ Generate Tournament Slogan ✨</button>
+                <div id="sloganOutput" class="llm-output"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const mainPosterContainer = document.getElementById('main-poster-container');
+            const loadingOverlay = document.getElementById('loading-overlay');
+            const posterBackground = document.getElementById('poster-background');
+            const posterContent = document.getElementById('poster-content');
+            const generateSloganBtn = document.getElementById('generateSloganBtn');
+            const sloganOutput = document.getElementById('sloganOutput');
+
+            // Prompt for a generic, vibrant cricket stadium background image
+            const backgroundPrompt = `A dynamic and vibrant cricket stadium background with abstract elements of a batsman and bowler. Focus on energetic colors like green, orange, and blue. The style should be modern and suitable as a backdrop for text overlay. Ensure there is enough empty space for text.`;
+
+            // Function to generate the background image
+            async function generateBackgroundImage() {
+                try {
+                    const payload = { instances: { prompt: backgroundPrompt }, parameters: { "sampleCount": 1} };
+                    const apiKey = ""; // API key will be provided at runtime
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        console.error('HTTP Error for background image:', response.status, response.statusText, errorText);
+                        loadingOverlay.innerHTML = `<p class="text-red-500 text-lg">Error: ${response.status} ${response.statusText}. Could not generate background image.</p>`;
+                        return;
+                    }
+
+                    const result = await response.json();
+
+                    if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
+                        const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                        posterBackground.style.backgroundImage = `url('${imageUrl}')`;
+
+                        // Hide loading overlay and show content
+                        loadingOverlay.classList.add('hidden');
+                        posterContent.classList.remove('hidden');
+                    } else {
+                        loadingOverlay.innerHTML = '<p class="text-red-500 text-lg">Failed to generate background image. Please try again. No predictions found.</p>';
+                        console.error('Image generation failed: No predictions found or bytesBase64Encoded missing.', result);
+                    }
+                } catch (error) {
+                    loadingOverlay.innerHTML = '<p class="text-red-500 text-lg">An error occurred while generating the background image. Please check your network connection.</p>';
+                    console.error('Catch block error for background image:', error);
+                }
+            }
+
+            // Function to generate slogan using Gemini API
+            generateSloganBtn.addEventListener('click', async () => {
+                sloganOutput.innerHTML = '<div class="llm-loading-spinner"></div> Generating slogan...';
+                generateSloganBtn.disabled = true; // Disable button during generation
+
+                const sloganPrompt = "Generate 3 short, catchy, and exciting slogans for a local T-20 cricket tournament named 'Hanumangarh T-20 Cup 2025'. The slogans should convey enthusiasm, competition, and local pride. Provide them as a comma-separated list.";
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: sloganPrompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // API key will be provided at runtime
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        sloganOutput.textContent = `Error: Could not generate slogan. (${response.status} ${response.statusText})`;
+                        console.error('HTTP Error for slogan generation:', response.status, response.statusText, errorText);
+                        return;
+                    }
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const text = result.candidates[0].content.parts[0].text;
+                        sloganOutput.textContent = `Suggested Slogans: ${text}`;
+                    } else {
+                        sloganOutput.textContent = "Failed to generate slogan. No valid response.";
+                        console.error('Slogan generation failed: Unexpected response structure', result);
+                    }
+                } catch (error) {
+                    sloganOutput.textContent = "An error occurred while generating slogan. Please try again.";
+                    console.error('Catch block error for slogan generation:', error);
+                } finally {
+                    generateSloganBtn.disabled = false; // Re-enable button
+                }
+            });
+
+            // Call to generate the initial background image
+            generateBackgroundImage();
+        });
+    </script>
+</body>
+</html>

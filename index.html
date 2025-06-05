@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hanumangarh T-20 Cup Poster</title>
+    <title>Hanumangarh T-20 Cup</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -46,6 +46,8 @@
             background-position: center;
             filter: brightness(0.6) grayscale(0.2); /* Slightly darken and desaturate background for text readability */
             z-index: 1;
+            /* Fixed background image */
+            background-image: url('https://www.shutterstock.com/image-illustration/grand-stadium-full-spectators-expecting-600nw-1807322755.jpg'); /* Placeholder image for a cricket stadium */
         }
         .poster-content {
             position: relative;
@@ -57,19 +59,7 @@
             gap: 15px;
             box-sizing: border-box;
         }
-        .loading-spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid #3498db;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 50px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        /* Removed loading spinner for background image as it's no longer fetched dynamically */
         .text-overlay {
             background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent dark background for text */
             color: #fff;
@@ -129,7 +119,7 @@
         }
 
         .semifinals li {
-            width: 35%;
+            width: 45%;
             list-style: none;
             text-align: center;
             font-size: 1rem;
@@ -149,9 +139,14 @@
             padding: 15px;
             border-radius: 8px;
             margin-top: 20px;
-            width: 90%;
+            width: 100%;
             box-sizing: border-box;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            /* Added flexbox properties to center content */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .llm-section button {
             background-color: #4CAF50; /* Green button */
@@ -184,18 +179,41 @@
             vertical-align: middle;
             margin-left: 10px;
         }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Styles for Directions button */
+        .directions-section {
+            background-color: rgba(66, 153, 225, 0.8); /* Blue background for directions */
+            margin-top: 15px; /* Add some space above this section */
+        }
+        .directions-section button {
+            background-color: #3182CE; /* Darker blue button */
+        }
+        .directions-section button:hover {
+            background-color: #2b6cb0;
+        }
+
+        /* New styles for Call button */
+        .call-section {
+            background-color: rgba(220, 38, 38, 0.8); /* Red background for call button */
+            margin-top: 15px;
+        }
+        .call-section button {
+            background-color: #DC2626; /* Darker red button */
+        }
+        .call-section button:hover {
+            background-color: #b91c1c;
+        }
     </style>
 </head>
 <body>
     <div class="poster-container" id="main-poster-container">
-        <div id="loading-overlay" class="absolute inset-0 bg-gray-900 bg-opacity-75 flex flex-col justify-center items-center z-30">
-            <div id="loading-indicator" class="loading-spinner"></div>
-            <p id="loading-text" class="text-white text-lg mt-4">Crafting your perfect poster...</p>
-        </div>
-
         <div id="poster-background" class="poster-background"></div>
 
-        <div id="poster-content" class="poster-content hidden">
+        <div id="poster-content" class="poster-content">
             <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg">Hanumangarh T-20 Cup 2025</h1>
             <p class="text-xl md:text-2xl font-bold text-white mb-4 drop-shadow-md">Sunday, June 8th</p>
 
@@ -213,8 +231,8 @@
                 <h2 class="text-blue-300">Match Timings:</h2>
                 <ul class="match-schedule">
                     <div class="semifinals">
-                        <li><b>Semifinal 1:</b> Toss 5:45 AM | Match 6:00 AM</li>
-                        <li><b>Semifinal 2:</b> Toss 8:45 AM | Match 9:00 AM</li>
+                        <li><b>Semifinal 1:</b> Toss - 5:45 AM | Match - 6:00 AM</li>
+                        <li><b>Semifinal 2:</b> Toss - 8:00 AM | Match - After Semifinal 1</li>
                     </div>
                     <li class="final"><b>Final Match:</b> Toss 3:45 PM | Match 4:00 PM</li>
                 </ul>
@@ -222,127 +240,53 @@
 
             <div class="text-overlay text-left">
                 <h2 class="text-green-300">Tournament Rules:</h2>
-                <ul class="list-disc list-inside">
+                <ol class="list-disc list-inside">
                     <li>Each match: 20 overs, 12 players (11 playing + 1 impact).</li>
                     <li>Min 5 bowlers, 1 bowler max 4 overs.</li>
                     <li>6 over batting powerplay (max 2 players outside 30 yard).</li>
                     <li>7-20 overs: max 5 fielders outside circle.</li>
                     <li>One innings time: 1 hour 25 min.</li>
-                    <li>**Penalty for slow over rate:** 2 extra fielder inside 30 yd if 18 overs not finished in 1hr 20min.</li>
-                    <li>**Penalty for late arrival:** 5 runs + 1 over for every 5 min.</li>
+                    <li>Penalty for slow over rate: 2 extra fielder inside 30 yd if 18 overs not finished in 1hr 20min.</li>
+                    <li>Penalty for late arrival: 5 runs + 1 over for every 5 min.</li>
                     <li>5 min water break after 10 overs of each inning.</li>
                     <li>Innings break of 10 minutes.</li>
                     <li>No extra fielder will be provided.</li>
                     <li>Teams must start with available players if full squad isn't present.</li>
                     <li>Each batting team gets 3 new balls per inning (not replaced until broken or lost).</li>
-                </ul>
+                </ol>
             </div>
 
-            <div class="llm-section">
-                <button id="generateSloganBtn">✨ Generate Tournament Slogan ✨</button>
-                <div id="sloganOutput" class="llm-output"></div>
+            <div class="directions-section llm-section text-overlay">
+                <button id="getDirectionsBtn">📍 Get Directions to Venue</button>
+            </div>
+
+            <div class="call-section llm-section text-overlay">
+                <button id="callSomeoneBtn">📞 Call Shakti Sharma for Enquiries</button>
             </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-            const mainPosterContainer = document.getElementById('main-poster-container');
-            const loadingOverlay = document.getElementById('loading-overlay');
-            const posterBackground = document.getElementById('poster-background');
-            const posterContent = document.getElementById('poster-content');
-            const generateSloganBtn = document.getElementById('generateSloganBtn');
-            const sloganOutput = document.getElementById('sloganOutput');
+            const getDirectionsBtn = document.getElementById('getDirectionsBtn');
+            const callSomeoneBtn = document.getElementById('callSomeoneBtn');
 
-            // Prompt for a generic, vibrant cricket stadium background image
-            const backgroundPrompt = `A dynamic and vibrant cricket stadium background with abstract elements of a batsman and bowler. Focus on energetic colors like green, orange, and blue. The style should be modern and suitable as a backdrop for text overlay. Ensure there is enough empty space for text.`;
-
-            // Function to generate the background image
-            async function generateBackgroundImage() {
-                try {
-                    const payload = { instances: { prompt: backgroundPrompt }, parameters: { "sampleCount": 1} };
-                    const apiKey = "AIzaSyDZsl_rk4rX8-x8SDFqi5g-9-8db5ri1eE"; // API key will be provided at runtime
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        console.error('HTTP Error for background image:', response.status, response.statusText, errorText);
-                        loadingOverlay.innerHTML = `<p class="text-red-500 text-lg">Error: ${response.status} ${response.statusText}. Could not generate background image.</p>`;
-                        return;
-                    }
-
-                    const result = await response.json();
-
-                    if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
-                        const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-                        posterBackground.style.backgroundImage = `url('${imageUrl}')`;
-
-                        // Hide loading overlay and show content
-                        loadingOverlay.classList.add('hidden');
-                        posterContent.classList.remove('hidden');
-                    } else {
-                        loadingOverlay.innerHTML = '<p class="text-red-500 text-lg">Failed to generate background image. Please try again. No predictions found.</p>';
-                        console.error('Image generation failed: No predictions found or bytesBase64Encoded missing.', result);
-                    }
-                } catch (error) {
-                    loadingOverlay.innerHTML = '<p class="text-red-500 text-lg">An error occurred while generating the background image. Please check your network connection.</p>';
-                    console.error('Catch block error for background image:', error);
-                }
-            }
-
-            // Function to generate slogan using Gemini API
-            generateSloganBtn.addEventListener('click', async () => {
-                sloganOutput.innerHTML = '<div class="llm-loading-spinner"></div> Generating slogan...';
-                generateSloganBtn.disabled = true; // Disable button during generation
-
-                const sloganPrompt = "Generate 3 short, catchy, and exciting slogans for a local T-20 cricket tournament named 'Hanumangarh T-20 Cup 2025'. The slogans should convey enthusiasm, competition, and local pride. Provide them as a comma-separated list.";
-
-                try {
-                    let chatHistory = [];
-                    chatHistory.push({ role: "user", parts: [{ text: sloganPrompt }] });
-                    const payload = { contents: chatHistory };
-                    const apiKey = "AIzaSyDZsl_rk4rX8-x8SDFqi5g-9-8db5ri1eE"; 
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (!response.ok) {
-                        const errorText = await response.text();
-                        sloganOutput.textContent = `Error: Could not generate slogan. (${response.status} ${response.statusText})`;
-                        console.error('HTTP Error for slogan generation:', response.status, response.statusText, errorText);
-                        return;
-                    }
-
-                    const result = await response.json();
-                    if (result.candidates && result.candidates.length > 0 &&
-                        result.candidates[0].content && result.candidates[0].content.parts &&
-                        result.candidates[0].content.parts.length > 0) {
-                        const text = result.candidates[0].content.parts[0].text;
-                        sloganOutput.textContent = `Suggested Slogans: ${text}`;
-                    } else {
-                        sloganOutput.textContent = "Failed to generate slogan. No valid response.";
-                        console.error('Slogan generation failed: Unexpected response structure', result);
-                    }
-                } catch (error) {
-                    sloganOutput.textContent = "An error occurred while generating slogan. Please try again.";
-                    console.error('Catch block error for slogan generation:', error);
-                } finally {
-                    generateSloganBtn.disabled = false; // Re-enable button
-                }
+            // Event listener for the Get Directions button
+            getDirectionsBtn.addEventListener('click', () => {
+                // IMPORTANT: Replace "Hanumangarh Cricket Ground, Hanumangarh, Rajasthan, India"
+                // with the precise address or coordinates of your venue for accurate directions.
+                const venueAddress = "Jaipur Cricket Stadium Hanumangarh Jn.";
+                const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venueAddress)}`;
+                window.open(googleMapsUrl, '_blank');
             });
 
-            // Call to generate the initial background image
-            generateBackgroundImage();
+            // Event listener for the Call Someone button
+            callSomeoneBtn.addEventListener('click', () => {
+                // IMPORTANT: Replace "919876543210" with the actual phone number you want to call.
+                // Include country code (e.g., +91 for India) for international calls.
+                const contactNumber = "919079242017";
+                window.open(`tel:${contactNumber}`);
+            });
         });
     </script>
 </body>

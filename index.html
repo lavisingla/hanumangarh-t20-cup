@@ -279,7 +279,81 @@
         .directions-section { animation-delay: 2.1s; }
         .call-section { animation-delay: 2.4s; }
 
-
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: left;
+            position: relative;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            /* Added background properties for modal content */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: #333; /* Default text color for modal content */
+        }
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #333;
+        }
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 15px;
+            /* Ensure title is readable on background */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            text-decoration: underline;
+        }
+        .player-list {
+            list-style: disc;
+            padding-left: 20px;
+            /* Ensure player list is readable on background */
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .player-list li {
+            margin-bottom: 5px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            font-style:italic
+        }
     </style>
 </head>
 <body>
@@ -293,10 +367,10 @@
             <div class="text-overlay">
                 <h2 class="text-orange-300">Teams Battling for Glory:</h2>
                 <div class="team-list">
-                    <span class="team-item">Hanumangarh Strikers <span class="emoji">⭐</span></span>
-                    <span class="team-item">Jorkian Kings <span class="emoji">👑</span></span>
-                    <span class="team-item">Johal Lions <span class="emoji">🦁</span></span>
-                    <span class="team-item">Hanumangarh Challengers <span class="emoji">🐅</span></span>
+                    <span class="team-item" data-team="Hanumangarh Strikers">Hanumangarh Strikers <span class="emoji">⭐</span></span>
+                    <span class="team-item" data-team="Jorkian Kings">Jorkian Kings <span class="emoji">👑</span></span>
+                    <span class="team-item" data-team="Johal Lions">Johal Lions <span class="emoji">🦁</span></span>
+                    <span class="team-item" data-team="Hanumangarh Challengers">Hanumangarh Challengers <span class="emoji">🐅</span></span>
                 </div>
             </div>
 
@@ -339,13 +413,102 @@
         </div>
     </div>
 
+    <!-- Player List Modal -->
+    <div id="playerListModal" class="modal-overlay">
+        <div class="modal-content" id="modalContent">
+            <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+            <h2 class="modal-title" id="modalTeamName"></h2>
+            <ul class="player-list" id="modalPlayerList">
+                <!-- Player names will be injected here -->
+            </ul>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
-
             const getDirectionsBtn = document.getElementById('getDirectionsBtn');
             const callSomeoneBtn = document.getElementById('callSomeoneBtn');
             const teamItems = document.querySelectorAll('.team-item'); // Get all team items
 
+            const playerListModal = document.getElementById('playerListModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const modalTeamName = document.getElementById('modalTeamName');
+            const modalPlayerList = document.getElementById('modalPlayerList');
+            const modalContent = document.getElementById('modalContent'); // Get the modal content div
+
+            // Define player lists for each team and their corresponding background images
+            const teamPlayers = {
+                "Hanumangarh Challengers": {
+                    players: [
+                        "Amit Dotasara (C)",
+                        "Vinod Jakhar (VC)",
+                        "Marshal",
+                        "Sahil",
+                        "Rajesh",
+                        "Dinesh",
+                        "Sandeep",
+                        "Gaganjeet",
+                        "Balsher",
+                        "Gurvinder",
+                        "Pradeep",
+                        "Ashok"
+                    ],
+                    background: 'https://t3.ftcdn.net/jpg/01/97/33/46/360_F_197334647_aClfAIrrc0RPrsC8V52RN4MkzNmQCysc.jpg' // Dark Green
+                },
+                "Johal Lions": {
+                    players: [
+                        "Khushneet (C)",
+                        "Mannu Hirnawali",
+                        "Rahul Hirnawali",
+                        "Jaydeep",
+                        "Sandy",
+                        "Vijay (Vice Captain)",
+                        "Gurpreet Manuka",
+                        "Lovely Dabli",
+                        "Vinod Nehra Ji",
+                        "Messi",
+                        "Amandeep Chistiyan",
+                        "Dr. Jagtpal"
+                    ],
+                    background: 'https://t3.ftcdn.net/jpg/01/97/33/46/360_F_197334647_aClfAIrrc0RPrsC8V52RN4MkzNmQCysc.jpg' // Orange
+                },
+                "Hanumangarh Strikers": {
+                    players: [
+                        "Shakti Sharma (C)",
+                        "Gurmukh",
+                        "Raman Sihag",
+                        "Harbhajan",
+                        "Umesh Kumar",
+                        "Sonu Dholipal",
+                        "Babbu Thakur",
+                        "Rinkal",
+                        "Raju Kikranwali",
+                        "Rohit Moyal",
+                        "Prince Mallad",
+                        "Kookna Ji"
+                    ],
+                    background: 'https://t3.ftcdn.net/jpg/01/97/33/46/360_F_197334647_aClfAIrrc0RPrsC8V52RN4MkzNmQCysc.jpg' // Royal Blue
+                },
+                "Jorkian Kings": {
+                    players: [
+                        "Harman Dhillon (C)",
+                        "Navjot Gill",
+                        "Gurwinder Gill",
+                        "Anmol Munjal",
+                        "Ninder Dhillon",
+                        "Babbu Gill",
+                        "Monu Surewala",
+                        "Raju Kishanpura",
+                        "Aman Manaksar",
+                        "Pardeep Hirnawali",
+                        "Shubam Sahu",
+                        "Pawan Deep Haripura"
+                    ],
+                    background: 'https://t3.ftcdn.net/jpg/01/97/33/46/360_F_197334647_aClfAIrrc0RPrsC8V52RN4MkzNmQCysc.jpg' // Purple
+                }
+            };
+
+        
             // Event listener for the Get Directions button
             getDirectionsBtn.addEventListener('click', () => {
                 const venueAddress = "Jaipur Cricket Stadium Hanumangarh Jn."; // Fixed venue address
@@ -359,17 +522,42 @@
                 window.open(`tel:${contactNumber}`);
             });
 
-            // Add click event listeners to team items for text-to-speech
+            // Add click event listeners to team items for showing player list
             teamItems.forEach(item => {
                 item.addEventListener('click', () => {
-                    const teamName = item.textContent.trim().replace(/⭐|👑|🦁|🐅/g, ''); // Get text content and remove emojis
-                    if ('speechSynthesis' in window) {
-                        const utterance = new SpeechSynthesisUtterance(teamName);
-                        speechSynthesis.speak(utterance);
+                    const teamName = item.getAttribute('data-team');
+                    const teamData = teamPlayers[teamName];
+
+                    if (teamData && teamData.players) {
+                        modalTeamName.textContent = `${teamName} Players`;
+                        modalPlayerList.innerHTML = ''; // Clear previous list
+                        teamData.players.forEach(player => {
+                            const li = document.createElement('li');
+                            li.textContent = player;
+                            modalPlayerList.appendChild(li);
+                        });
+                        // Set the background image for the modal content
+                        modalContent.style.backgroundImage = `url('${teamData.background}')`;
+                        modalContent.style.filter = 'brightness(1)'; // Reset any filter from previous
+                        playerListModal.classList.add('active'); // Show the modal
                     } else {
-                        console.warn('SpeechSynthesis API not supported in this browser.');
+                        console.warn(`No player list or background found for team: ${teamName}`);
                     }
                 });
+            });
+
+            // Event listener to close the modal
+            closeModalBtn.addEventListener('click', () => {
+                playerListModal.classList.remove('active');
+                modalContent.style.backgroundImage = ''; // Clear background when closing
+            });
+
+            // Close modal if clicked outside content
+            playerListModal.addEventListener('click', (event) => {
+                if (event.target === playerListModal) {
+                    playerListModal.classList.remove('active');
+                    modalContent.style.backgroundImage = ''; // Clear background when closing
+                }
             });
         });
     </script>

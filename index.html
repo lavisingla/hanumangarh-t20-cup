@@ -24,7 +24,6 @@
             position: relative;
             width: 100%;
             max-width: 800px;
-            /* Removed fixed height and max-height to allow content to dictate height */
             height: auto; /* Allow height to adjust based on content */
             min-height: 80vh; /* Ensure it's not too small on larger screens */
             background-color: #ffffff;
@@ -70,7 +69,16 @@
             padding: 10px 15px;
             border-radius: 8px;
             margin-bottom: 10px;
+            /* Animation for sections */
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
         }
+        .text-overlay.rules { animation-delay: 1.5s; }
+        .text-overlay.slogan { animation-delay: 1.8s; }
+        .text-overlay.directions { animation-delay: 2.1s; }
+        .text-overlay.call { animation-delay: 2.4s; }
+
+
         .text-overlay h2 {
             font-size: 1.5rem;
             font-weight: bold;
@@ -104,7 +112,15 @@
             gap: 5px;
             font-size: 0.9rem;
             font-weight: 600;
+            /* Animation for team items */
+            opacity: 0;
+            animation: fadeInScale 0.5s ease-out forwards;
         }
+        .team-item:nth-child(1) { animation-delay: 0.6s; }
+        .team-item:nth-child(2) { animation-delay: 0.8s; }
+        .team-item:nth-child(3) { animation-delay: 1.0s; }
+        .team-item:nth-child(4) { animation-delay: 1.2s; }
+
         .emoji {
             font-size: 1.2rem;
         }
@@ -150,6 +166,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            /* Animation for sections */
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
         }
         .llm-section button {
             background-color: #4CAF50; /* Green button */
@@ -160,10 +179,11 @@
             cursor: pointer;
             font-size: 1rem;
             font-weight: bold;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform transition */
         }
         .llm-section button:hover {
             background-color: #45a049;
+            transform: scale(1.05); /* Slight scale on hover */
         }
         .llm-output {
             margin-top: 15px;
@@ -190,24 +210,75 @@
         .directions-section {
             background-color: rgba(66, 153, 225, 0.8);
             margin-top: 15px;
+            /* Animation for sections */
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 2.1s; /* Delayed after slogan section */
         }
         .directions-section button {
             background-color: #3182CE;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         .directions-section button:hover {
             background-color: #2b6cb0;
+            transform: scale(1.05);
         }
 
         .call-section {
             background-color: rgba(220, 38, 38, 0.8);
             margin-top: 15px;
+            /* Animation for sections */
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 2.4s; /* Delayed after directions section */
         }
         .call-section button {
             background-color: #DC2626;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
         .call-section button:hover {
             background-color: #b91c1c;
+            transform: scale(1.05);
         }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Initial hidden state and animation for main title and date */
+        .main-title, .main-date {
+            opacity: 0;
+            animation: slideInDown 0.8s ease-out forwards;
+        }
+        .main-date {
+            animation-delay: 0.3s; /* Delay date animation slightly */
+        }
+        .text-overlay {
+             opacity: 0;
+             animation: fadeIn 1s ease-out forwards;
+        }
+        .text-overlay:nth-of-type(1) { animation-delay: 0.9s; } /* Teams overlay */
+        .text-overlay:nth-of-type(2) { animation-delay: 1.2s; } /* Timings overlay */
+        .text-overlay:nth-of-type(3) { animation-delay: 1.5s; } /* Rules overlay */
+
+        /* Override specific section animations based on their order in HTML */
+        .llm-section { animation-delay: 1.8s; }
+        .directions-section { animation-delay: 2.1s; }
+        .call-section { animation-delay: 2.4s; }
+
+
     </style>
 </head>
 <body>
@@ -215,8 +286,8 @@
         <div id="poster-background" class="poster-background"></div>
 
         <div id="poster-content" class="poster-content">
-            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg">Hanumangarh T-20 Cup 2025</h1>
-            <p class="text-xl md:text-2xl font-bold text-white mb-4 drop-shadow-md">Sunday, June 8th</p>
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg main-title">Hanumangarh T-20 Cup 2025</h1>
+            <p class="text-xl md:text-2xl font-bold text-white mb-4 drop-shadow-md main-date">Sunday, June 8th</p>
 
             <div class="text-overlay">
                 <h2 class="text-orange-300">Teams Battling for Glory:</h2>
@@ -257,6 +328,7 @@
                 </ol>
             </div>
 
+
             <div class="directions-section llm-section">
                 <button id="getDirectionsBtn">📍 Get Directions to Venue</button>
             </div>
@@ -272,21 +344,18 @@
 
             const getDirectionsBtn = document.getElementById('getDirectionsBtn');
             const callSomeoneBtn = document.getElementById('callSomeoneBtn');
+            });
 
             // Event listener for the Get Directions button
             getDirectionsBtn.addEventListener('click', () => {
-                // IMPORTANT: Replace "Hanumangarh Cricket Ground, Hanumangarh, Rajasthan, India"
-                // with the precise address or coordinates of your venue for accurate directions.
-                const venueAddress = "Jaipur Cricket Stadium Hanumangarh Jn.";
+                const venueAddress = "Jaipur Cricket Stadium Hanumangarh Jn."; // Fixed venue address
                 const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(venueAddress)}`;
                 window.open(googleMapsUrl, '_blank');
             });
 
             // Event listener for the Call Someone button
             callSomeoneBtn.addEventListener('click', () => {
-                // IMPORTANT: Replace "919876543210" with the actual phone number you want to call.
-                // Include country code (e.g., +91 for India) for international calls.
-                const contactNumber = "919079242017";
+                const contactNumber = "919079242017"; // Fixed contact number
                 window.open(`tel:${contactNumber}`);
             });
         });

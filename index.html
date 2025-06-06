@@ -112,6 +112,7 @@
             gap: 5px;
             font-size: 0.9rem;
             font-weight: 600;
+            cursor: pointer; /* Indicate it's clickable */
             /* Animation for team items */
             opacity: 0;
             animation: fadeInScale 0.5s ease-out forwards;
@@ -328,7 +329,6 @@
                 </ol>
             </div>
 
-
             <div class="directions-section llm-section">
                 <button id="getDirectionsBtn">📍 Get Directions to Venue</button>
             </div>
@@ -344,7 +344,7 @@
 
             const getDirectionsBtn = document.getElementById('getDirectionsBtn');
             const callSomeoneBtn = document.getElementById('callSomeoneBtn');
-            });
+            const teamItems = document.querySelectorAll('.team-item'); // Get all team items
 
             // Event listener for the Get Directions button
             getDirectionsBtn.addEventListener('click', () => {
@@ -357,6 +357,19 @@
             callSomeoneBtn.addEventListener('click', () => {
                 const contactNumber = "919079242017"; // Fixed contact number
                 window.open(`tel:${contactNumber}`);
+            });
+
+            // Add click event listeners to team items for text-to-speech
+            teamItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const teamName = item.textContent.trim().replace(/⭐|👑|🦁|🐅/g, ''); // Get text content and remove emojis
+                    if ('speechSynthesis' in window) {
+                        const utterance = new SpeechSynthesisUtterance(teamName);
+                        speechSynthesis.speak(utterance);
+                    } else {
+                        console.warn('SpeechSynthesis API not supported in this browser.');
+                    }
+                });
             });
         });
     </script>
